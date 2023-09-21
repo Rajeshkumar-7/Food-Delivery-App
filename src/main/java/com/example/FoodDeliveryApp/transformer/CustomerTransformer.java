@@ -26,7 +26,7 @@ public class CustomerTransformer {
                 .name(customer.getName())
                 .mobileNumber(customer.getMobileNumber())
                 .address(customer.getAddress())
-                .cartResponse(CartToCartResponse(customer.getCart()))
+                .cart(CartToCartResponse(customer.getCart()))
                 .build();
 
     }

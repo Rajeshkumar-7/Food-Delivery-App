@@ -16,5 +16,5 @@ public class CustomerResponse {
 
     String address;
 
-    CartResponse cartResponse;
+    CartResponse cart;
 }

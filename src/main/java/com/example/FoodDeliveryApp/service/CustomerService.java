@@ -7,4 +7,6 @@ import com.example.FoodDeliveryApp.dto.response.CustomerResponse;
 public interface CustomerService {
 
     public CustomerResponse addCustomer(CustomerRequest customerRequest);
+
+    CustomerResponse getCustomerByMobile(String mobileNumber);
 }
