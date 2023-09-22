@@ -1,8 +1,8 @@
 package com.example.FoodDeliveryApp.Enum;
 
-public enum RestarauntCategory {
+public enum RestaurantCategory {
 
-    PURE_VEG,
+    VEG,
     NON_VEG,
     CHINESE,
     PIZZA_OUTLET,

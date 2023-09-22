@@ -37,6 +37,7 @@ public class Customer {
 
     String address;
 
+    @Enumerated(EnumType.STRING)
     Gender gender;
 
     @OneToOne(mappedBy = "customer" , cascade = CascadeType.ALL)

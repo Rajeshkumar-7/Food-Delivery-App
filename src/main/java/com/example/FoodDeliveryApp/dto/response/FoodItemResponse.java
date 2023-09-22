@@ -14,6 +14,8 @@ public class FoodItemResponse {
 
     boolean veg;
 
+    boolean available;
+
     double price;
 
 }

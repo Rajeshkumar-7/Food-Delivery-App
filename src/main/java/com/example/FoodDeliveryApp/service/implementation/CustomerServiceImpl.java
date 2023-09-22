@@ -44,7 +44,7 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerResponse getCustomerByMobile(String mobileNumber) {
 
         // Find the Customer by Mobile Number
-        Customer customer = customerRepository.findbyMobileNumber(mobileNumber);
+        Customer customer = customerRepository.findByMobileNumber(mobileNumber);
 
         // If the customer is not found throw an Exception
         if(customer == null){

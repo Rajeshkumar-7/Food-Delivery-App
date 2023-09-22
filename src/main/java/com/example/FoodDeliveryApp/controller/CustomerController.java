@@ -25,7 +25,7 @@ public class CustomerController {
 
     }
 
-    @GetMapping("/get/mobile/{mobile}")
+    @GetMapping("/find/mobile/{mobile}")
     public ResponseEntity getCustomerByMobile(@PathVariable("mobile") String mobileNumber){
 
         try {

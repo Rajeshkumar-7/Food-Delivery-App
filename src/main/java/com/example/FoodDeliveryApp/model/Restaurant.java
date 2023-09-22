@@ -1,6 +1,6 @@
 package com.example.FoodDeliveryApp.model;
 
-import com.example.FoodDeliveryApp.Enum.RestarauntCategory;
+import com.example.FoodDeliveryApp.Enum.RestaurantCategory;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -26,7 +26,8 @@ public class Restaurant {
 
     String location;
 
-    RestarauntCategory restarauntCategory;
+    @Enumerated(EnumType.STRING)
+    RestaurantCategory restaurantCategory;
 
     @Column(unique = true,nullable = false)
     @Size(min = 10, max = 10)
