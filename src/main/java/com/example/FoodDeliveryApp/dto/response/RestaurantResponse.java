@@ -23,5 +23,5 @@ public class RestaurantResponse {
 
     RestaurantCategory restaurantCategory;
 
-    List<FoodItemResponse> foodItemResponses;
+    List<MenuItemResponse> menuItemRespons;
 }

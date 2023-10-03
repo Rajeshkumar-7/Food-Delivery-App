@@ -10,9 +10,9 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "food_item")
+@Table(name = "menu_item")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class FoodItem {
+public class MenuItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +37,5 @@ public class FoodItem {
     @JoinColumn
     Restaurant restaurant;
 
-    @ManyToOne
-    @JoinColumn
-    OrderEntity order;
+
 }

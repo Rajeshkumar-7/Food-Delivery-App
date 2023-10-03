@@ -1,17 +1,21 @@
 package com.example.FoodDeliveryApp.service.implementation;
 
-import com.example.FoodDeliveryApp.dto.request.FoodItemRequest;
+import com.example.FoodDeliveryApp.dto.request.MenuItemRequest;
 import com.example.FoodDeliveryApp.dto.request.RestaurantRequest;
+import com.example.FoodDeliveryApp.dto.response.MenuItemResponse;
 import com.example.FoodDeliveryApp.dto.response.RestaurantResponse;
 import com.example.FoodDeliveryApp.exception.RestaurantNotFoundException;
-import com.example.FoodDeliveryApp.model.FoodItem;
+import com.example.FoodDeliveryApp.model.MenuItem;
 import com.example.FoodDeliveryApp.model.Restaurant;
 import com.example.FoodDeliveryApp.repository.RestaurantRepository;
 import com.example.FoodDeliveryApp.service.RestaurantService;
-import com.example.FoodDeliveryApp.transformer.FoodItemTransformer;
+import com.example.FoodDeliveryApp.transformer.MenuItemTransformer;
 import com.example.FoodDeliveryApp.transformer.RestaurantTransformer;
 import com.example.FoodDeliveryApp.utils.ValidationUtils;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
@@ -58,25 +62,42 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public RestaurantResponse addFoodItemToRestaurant(FoodItemRequest foodItemRequest) {
+    public RestaurantResponse addMenuItemToRestaurant(MenuItemRequest menuItemRequest) {
 
         // Check if the Restaurant is Present or Not
-        if(!validationUtils.validateRestaurantId(foodItemRequest.getRestaurantId())){
+        if(!validationUtils.validateRestaurantId(menuItemRequest.getRestaurantId())){
             throw new RestaurantNotFoundException("Restaurant Does Not Exist");
         }
 
-        Restaurant restaurant = restaurantRepository.findById(foodItemRequest.getRestaurantId()).get();
+        Restaurant restaurant = restaurantRepository.findById(menuItemRequest.getRestaurantId()).get();
 
         // Make the Food Entity
-        FoodItem foodItem = FoodItemTransformer.FoodItemRequestToFoodItem(foodItemRequest);
+        MenuItem menuItem = MenuItemTransformer.MenuItemRequestToMenuItem(menuItemRequest);
 
         // Add the Restaurant to FoodItem and FoodItem to the restaurant
-        foodItem.setRestaurant(restaurant);
-        restaurant.getAvailableFoodItems().add(foodItem);
+        menuItem.setRestaurant(restaurant);
+        restaurant.getAvailableMenuItems().add(menuItem);
 
         // Save the Restaurant and FoodItem to DB
         restaurantRepository.save(restaurant);
 
         return RestaurantTransformer.RestaurantToRestaurantResponse(restaurant);
+    }
+
+    @Override
+    public List<MenuItemResponse> getMenuFromRestaurant(int id) {
+        // Check if the Restaurant is Present or Not
+        if(!validationUtils.validateRestaurantId(id)){
+            throw new RestaurantNotFoundException("Restaurant Does Not Exist");
+        }
+
+        Restaurant restaurant = restaurantRepository.findById(id).get();
+
+        List<MenuItemResponse> menuItemRespons = restaurant.getAvailableMenuItems()
+                .stream()
+                .map(foodItem -> MenuItemTransformer.MenuItemToMenuItemResponse(foodItem))
+                .collect(Collectors.toList());
+
+        return menuItemRespons;
     }
 }

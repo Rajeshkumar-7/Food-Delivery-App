@@ -1,12 +1,16 @@
 package com.example.FoodDeliveryApp.controller;
 
-import com.example.FoodDeliveryApp.dto.request.FoodItemRequest;
+import com.example.FoodDeliveryApp.dto.request.MenuItemRequest;
 import com.example.FoodDeliveryApp.dto.request.RestaurantRequest;
+import com.example.FoodDeliveryApp.dto.response.MenuItemResponse;
 import com.example.FoodDeliveryApp.dto.response.RestaurantResponse;
+import com.example.FoodDeliveryApp.exception.RestaurantNotFoundException;
 import com.example.FoodDeliveryApp.service.implementation.RestaurantServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/restaurant")
@@ -33,8 +37,25 @@ public class RestaurantController {
     }
 
     @PostMapping("/add/food")
-    public ResponseEntity addFoodItemToRestaurant(@RequestBody FoodItemRequest foodItemRequest){
-        RestaurantResponse restaurantResponse = restaurantService.addFoodItemToRestaurant(foodItemRequest);
-        return new ResponseEntity<>(restaurantResponse , HttpStatus.ACCEPTED);
+    public ResponseEntity addMenuItemToRestaurant(@RequestBody MenuItemRequest menuItemRequest){
+        try{
+            RestaurantResponse restaurantResponse = restaurantService.addMenuItemToRestaurant(menuItemRequest);
+            return new ResponseEntity<>(restaurantResponse , HttpStatus.ACCEPTED);
+        }
+        catch (RestaurantNotFoundException e){
+            return new ResponseEntity<>(e.getMessage() , HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/get/menu")
+    public ResponseEntity getMenuFromRestaurant(@RequestParam("id") int id){
+        try{
+            List<MenuItemResponse> menuItemRespons = restaurantService.getMenuFromRestaurant(id);
+            return new ResponseEntity(menuItemRespons, HttpStatus.ACCEPTED);
+        }
+        catch (RestaurantNotFoundException e){
+            return new ResponseEntity<>(e.getMessage() , HttpStatus.BAD_REQUEST);
+        }
+
     }
 }

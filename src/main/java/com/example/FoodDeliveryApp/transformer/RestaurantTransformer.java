@@ -1,7 +1,7 @@
 package com.example.FoodDeliveryApp.transformer;
 
 import com.example.FoodDeliveryApp.dto.request.RestaurantRequest;
-import com.example.FoodDeliveryApp.dto.response.FoodItemResponse;
+import com.example.FoodDeliveryApp.dto.response.MenuItemResponse;
 import com.example.FoodDeliveryApp.dto.response.RestaurantResponse;
 import com.example.FoodDeliveryApp.model.Restaurant;
 
@@ -18,16 +18,16 @@ public class RestaurantTransformer {
                 .restaurantCategory(restaurantRequest.getRestaurantCategory())
                 .contactNumber((restaurantRequest.getContactNumber()))
                 .opened(true)
-                .availableFoodItems(new ArrayList<>())
+                .availableMenuItems(new ArrayList<>())
                 .orders(new ArrayList<>())
                 .build();
     }
 
     public static RestaurantResponse RestaurantToRestaurantResponse(Restaurant restaurant){
 
-        List<FoodItemResponse> foodItemResponses = restaurant.getAvailableFoodItems()
+        List<MenuItemResponse> menuItemRespons = restaurant.getAvailableMenuItems()
                 .stream()
-                .map(foodItem -> FoodItemTransformer.FoodItemToFoodResponse(foodItem))
+                .map(foodItem -> MenuItemTransformer.MenuItemToMenuItemResponse(foodItem))
                 .collect(Collectors.toList());
 
         return RestaurantResponse.builder()
@@ -36,7 +36,7 @@ public class RestaurantTransformer {
                 .opened(restaurant.isOpened())
                 .contactNumber(restaurant.getContactNumber())
                 .restaurantCategory(restaurant.getRestaurantCategory())
-                .foodItemResponses(foodItemResponses)
+                .menuItemRespons(menuItemRespons)
                 .build();
     }
 }

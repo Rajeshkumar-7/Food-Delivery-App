@@ -11,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Table(name = "food_item")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class FoodItemRequest {
+public class MenuItemRequest {
 
     int restaurantId;
 

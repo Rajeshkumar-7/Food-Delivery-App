@@ -1,14 +1,14 @@
 package com.example.FoodDeliveryApp.transformer;
 
 import com.example.FoodDeliveryApp.dto.response.CartResponse;
-import com.example.FoodDeliveryApp.dto.response.FoodItemResponse;
+import com.example.FoodDeliveryApp.dto.response.MenuItemResponse;
 import com.example.FoodDeliveryApp.model.Cart;
-import com.example.FoodDeliveryApp.model.FoodItem;
+import com.example.FoodDeliveryApp.model.MenuItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.FoodDeliveryApp.transformer.FoodItemTransformer.FoodItemToFoodResponse;
+import static com.example.FoodDeliveryApp.transformer.MenuItemTransformer.MenuItemToMenuItemResponse;
 
 public class CartTransformer {
 
@@ -18,12 +18,12 @@ public class CartTransformer {
                 .cartTotal(cart.getCartTotal())
                 .build();
 
-        List<FoodItemResponse> foodItemResponse = new ArrayList<>();
-        for(FoodItem foodItem : cart.getFoodItems()){
-            foodItemResponse.add(FoodItemToFoodResponse(foodItem));
+        List<MenuItemResponse> menuItemResponse = new ArrayList<>();
+        for(MenuItem menuItem : cart.getMenuItems()){
+            menuItemResponse.add(MenuItemToMenuItemResponse(menuItem));
         }
 
-        cartResponse.setFoodItems(foodItemResponse);
+        cartResponse.setFoodItems(menuItemResponse);
 
         return cartResponse;
     }
