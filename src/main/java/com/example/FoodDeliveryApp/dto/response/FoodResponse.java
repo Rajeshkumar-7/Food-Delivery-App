@@ -1,24 +1,26 @@
 package com.example.FoodDeliveryApp.dto.response;
 
+import com.example.FoodDeliveryApp.Enum.FoodCategory;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CustomerResponse {
+public class FoodResponse {
 
-    String name;
+    String dishName;
 
-    String mobileNumber;
+    FoodCategory category;
 
-    String address;
+    boolean veg;
 
-    double cartTotal;
+    double price;
 
-    List<FoodResponse> foodResponseList;
+    int quantityAdded;
+
+    double totalCost;
+
 }

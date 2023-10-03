@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Entity
 @Builder
@@ -31,11 +34,8 @@ public class MenuItem {
 
     @ManyToOne
     @JoinColumn
-    Cart cart;
-
-    @ManyToOne
-    @JoinColumn
     Restaurant restaurant;
 
-
+    @OneToMany(mappedBy = "menuItem" , cascade = CascadeType.ALL)
+    List<FoodItem> foodItems = new ArrayList<>();
 }

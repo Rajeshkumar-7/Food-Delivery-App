@@ -12,7 +12,15 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CartResponse {
 
-    int cartTotal;
+    String name;
 
-    List<MenuItemResponse> foodItems;
+    String mobileNumber;
+
+    String address;
+
+    double cartTotal;
+
+    String restaurantName;
+
+    List<FoodResponse> foodList;
 }

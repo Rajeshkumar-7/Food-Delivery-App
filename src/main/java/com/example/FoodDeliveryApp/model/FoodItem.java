@@ -4,28 +4,28 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Data
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "cart")
+@Table(name = "food_item")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Cart {
+public class FoodItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
-    double cartTotal;
+    int requiredQuantity;
 
-    @OneToOne
+    int totalCost;
+
+    @ManyToOne
     @JoinColumn
-    Customer customer;
+    Cart cart;
 
-    @OneToMany(mappedBy = "cart" , cascade = CascadeType.ALL)
-    List<FoodItem> foodItems = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn
+    MenuItem menuItem;
 }

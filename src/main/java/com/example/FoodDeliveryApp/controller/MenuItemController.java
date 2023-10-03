@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/foodItem")
+@RequestMapping("/menuItem")
 public class MenuItemController {
 
     final MenuItemServiceImpl menuItemService;
@@ -22,7 +22,7 @@ public class MenuItemController {
     }
 
 
-    @GetMapping("/get/foodItem/category/{category}")
+    @GetMapping("/get/MenuItem/category/{category}")
     public ResponseEntity getMenuItemByCategory(@PathVariable("category") String foodCategory){
         try{
             List<MenuItemResponse> menuItemRespons = menuItemService.getMenuItemByCategory(foodCategory);

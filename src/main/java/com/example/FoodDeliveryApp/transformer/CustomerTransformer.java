@@ -3,6 +3,7 @@ package com.example.FoodDeliveryApp.transformer;
 import com.example.FoodDeliveryApp.dto.request.CustomerRequest;
 import com.example.FoodDeliveryApp.dto.response.CustomerResponse;
 import com.example.FoodDeliveryApp.model.Customer;
+import com.example.FoodDeliveryApp.model.FoodItem;
 
 import static com.example.FoodDeliveryApp.transformer.CartTransformer.CartToCartResponse;
 
@@ -22,12 +23,15 @@ public class CustomerTransformer {
 
     public static CustomerResponse CustomerToCustomerResponse(Customer customer){
 
-        return CustomerResponse.builder()
+        CustomerResponse customerResponse =  CustomerResponse.builder()
                 .name(customer.getName())
                 .mobileNumber(customer.getMobileNumber())
                 .address(customer.getAddress())
-                .cart(CartToCartResponse(customer.getCart()))
+                .cartTotal(customer.getCart().getCartTotal())
                 .build();
 
+        for(FoodItem foodItem : customer.getCart().getFoodItems()){
+
+        }
     }
 }
