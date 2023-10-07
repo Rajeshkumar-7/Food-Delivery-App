@@ -28,6 +28,8 @@ public class DeliveryPartner {
     @Size(min = 10 , max = 10)
     String mobileNumber;
 
+    boolean available;
+
     @Enumerated(EnumType.STRING)
     Gender gender;
 

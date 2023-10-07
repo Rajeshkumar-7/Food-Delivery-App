@@ -22,6 +22,7 @@ public class DeliveryPartnerServiceImpl implements DeliveryPartnerService {
         DeliveryPartner deliveryPartner = new DeliveryPartner();
         deliveryPartner.setName(deliveryPartnerRequest.getName());
         deliveryPartner.setMobileNumber(deliveryPartnerRequest.getMobileNumber());
+        deliveryPartner.setAvailable(true);
         deliveryPartner.setGender(deliveryPartnerRequest.getGender());
 
         // Save the Entity in DB

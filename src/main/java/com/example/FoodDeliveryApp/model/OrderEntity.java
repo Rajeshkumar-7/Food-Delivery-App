@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "order_entity")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class OrderEntity {
+public class   OrderEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ public class OrderEntity {
 
     String orderId; //UUID
 
-    int orderTotal;
+    double orderTotal;
 
     @CreationTimestamp
     Date orderTime;
