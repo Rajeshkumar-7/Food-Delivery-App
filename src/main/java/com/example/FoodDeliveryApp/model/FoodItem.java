@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Data
 @Entity
 @Builder
@@ -19,7 +21,7 @@ public class FoodItem {
 
     int requiredQuantity;
 
-    int totalCost;
+    double totalCost;
 
     @ManyToOne
     @JoinColumn
@@ -28,4 +30,8 @@ public class FoodItem {
     @ManyToOne
     @JoinColumn
     MenuItem menuItem;
+
+    @ManyToOne
+    @JoinColumn
+    OrderEntity order;
 }
