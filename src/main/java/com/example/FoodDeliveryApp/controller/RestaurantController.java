@@ -56,6 +56,11 @@ public class RestaurantController {
         catch (RestaurantNotFoundException e){
             return new ResponseEntity<>(e.getMessage() , HttpStatus.BAD_REQUEST);
         }
+    }
 
+    @GetMapping("/get/more-than-x-orders")
+    public ResponseEntity getRestaurantWithMoreThanXOrders(@RequestParam("x") int x){
+        List<RestaurantResponse> restaurantResponses = restaurantService.getRestaurantWithMoreThanXOrders(x);
+        return new ResponseEntity<>(restaurantResponses , HttpStatus.FOUND);
     }
 }

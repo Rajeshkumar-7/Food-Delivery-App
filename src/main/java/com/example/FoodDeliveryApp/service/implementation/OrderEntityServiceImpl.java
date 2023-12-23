@@ -11,9 +11,12 @@ import com.example.FoodDeliveryApp.repository.OrderEntityRepository;
 import com.example.FoodDeliveryApp.repository.RestaurantRepository;
 import com.example.FoodDeliveryApp.service.OrderEntityService;
 import com.example.FoodDeliveryApp.transformer.OrderEntityTransformer;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class OrderEntityServiceImpl implements OrderEntityService {
@@ -22,19 +25,28 @@ public class OrderEntityServiceImpl implements OrderEntityService {
     final RestaurantRepository restaurantRepository;
     final OrderEntityRepository orderEntityRepository;
     final DeliverPartnerRepository deliverPartnerRepository;
+    final JavaMailSender javaMailSender;
 
-    public OrderEntityServiceImpl(OrderEntityRepository orderEntityRepository, DeliverPartnerRepository deliverPartnerRepository, CustomerRepository customerRepository, RestaurantRepository restaurantRepository) {
+    public OrderEntityServiceImpl(OrderEntityRepository orderEntityRepository, DeliverPartnerRepository deliverPartnerRepository, CustomerRepository customerRepository, RestaurantRepository restaurantRepository, JavaMailSender javaMailSender) {
         this.orderEntityRepository = orderEntityRepository;
         this.deliverPartnerRepository = deliverPartnerRepository;
         this.customerRepository = customerRepository;
         this.restaurantRepository = restaurantRepository;
+
+        this.javaMailSender = javaMailSender;
     }
 
     @Override
     public OrderEntityResponse placeOrder(String customerMobileNumber) {
 
         // Check if the customer is found or not
-        Customer customer = orderEntityRepository.findByMobileNumber(customerMobileNumber);
+        List<Customer> customers = customerRepository.findAll();
+        Customer customer = null;
+        for(Customer customer1 : customers){
+            if(customer1.getMobileNumber().equals(customerMobileNumber)){
+                customer = customer1;
+            }
+        }
         if(customer == null){
             throw new CustomerNotFoundException("Invalid Mobile Number !!");
         }
@@ -83,6 +95,20 @@ public class OrderEntityServiceImpl implements OrderEntityService {
         customerRepository.save(customer);
         restaurantRepository.save(restaurant);
         deliverPartnerRepository.save(deliveryPartner);
+
+        // Email the student
+        String text = "Hi "+customer.getName()+ ",\n" +
+                "     Your order from "+ restaurant.getName()+ " has been placed.It will be picked up by "
+                +deliveryPartner.getName()+".Delivery Partner contact details will be given below.\n"+
+                "DeliveryPartner Contact Number : "+deliveryPartner.getMobileNumber();
+
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setFrom("lms09101999@gmail.com");
+        simpleMailMessage.setTo(customer.getEmail());
+        simpleMailMessage.setSubject("Congrats! Your Order has been successfully placed");
+        simpleMailMessage.setText(text);
+
+        javaMailSender.send(simpleMailMessage);
 
         // Convert to OrderEntity DTO and return it
         return OrderEntityTransformer.OrderEntityToOrderEntityResponse(savedOrderEntity);

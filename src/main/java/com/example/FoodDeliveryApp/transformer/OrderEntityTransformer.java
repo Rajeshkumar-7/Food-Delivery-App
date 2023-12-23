@@ -27,7 +27,7 @@ public class OrderEntityTransformer {
                 .collect(Collectors.toList());
 
         return OrderEntityResponse.builder()
-                .customerMobile(orderEntity.getCustomer().getName())
+                .customerName(orderEntity.getCustomer().getName())
                 .customerMobile(orderEntity.getCustomer().getMobileNumber())
                 .orderId(orderEntity.getOrderId())
                 .orderTotal(orderEntity.getOrderTotal())
@@ -35,6 +35,7 @@ public class OrderEntityTransformer {
                 .deliveryPartnerName(orderEntity.getDeliveryPartner().getName())
                 .deliveryPartnerMobile(orderEntity.getDeliveryPartner().getMobileNumber())
                 .restaurantName(orderEntity.getRestaurant().getName())
+                .foodResponses(foodResponses)
                 .build();
     }
 }

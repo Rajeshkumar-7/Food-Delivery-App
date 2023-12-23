@@ -27,19 +27,18 @@ public class CustomerTransformer {
 
     public static CustomerResponse CustomerToCustomerResponse(Customer customer){
 
-        CustomerResponse customerResponse =  CustomerResponse.builder()
-                .name(customer.getName())
-                .mobileNumber(customer.getMobileNumber())
-                .address(customer.getAddress())
-                .cartTotal(customer.getCart().getCartTotal())
-                .build();
-
         List<FoodResponse> foodResponses = new ArrayList<>();
         for(FoodItem foodItem : customer.getCart().getFoodItems()){
             foodResponses.add(FoodItemTransformer.FoodItemToFoodResponse(foodItem));
         }
 
-        customerResponse.setFoodResponseList(foodResponses);
-        return customerResponse;
+        return  CustomerResponse.builder()
+                .name(customer.getName())
+                .mobileNumber(customer.getMobileNumber())
+                .address(customer.getAddress())
+                .cartTotal(customer.getCart().getCartTotal())
+                .foodResponseList(foodResponses)
+                .build();
+
     }
 }

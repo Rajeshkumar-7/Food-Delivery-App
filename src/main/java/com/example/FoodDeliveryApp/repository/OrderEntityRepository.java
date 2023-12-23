@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OrderEntityRepository extends JpaRepository<OrderEntity , Integer> {
 
-    Customer findByMobileNumber(String customerMobileNumber);
+
 }

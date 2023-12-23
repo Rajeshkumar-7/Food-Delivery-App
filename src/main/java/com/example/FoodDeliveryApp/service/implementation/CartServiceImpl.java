@@ -6,10 +6,7 @@ import com.example.FoodDeliveryApp.exception.CustomerNotFoundException;
 import com.example.FoodDeliveryApp.exception.MenuItemNotFoundException;
 import com.example.FoodDeliveryApp.exception.OutOfStockException;
 import com.example.FoodDeliveryApp.exception.RestaurantNotOpenedException;
-import com.example.FoodDeliveryApp.model.Cart;
-import com.example.FoodDeliveryApp.model.Customer;
-import com.example.FoodDeliveryApp.model.FoodItem;
-import com.example.FoodDeliveryApp.model.MenuItem;
+import com.example.FoodDeliveryApp.model.*;
 import com.example.FoodDeliveryApp.repository.CartRepository;
 import com.example.FoodDeliveryApp.repository.CustomerRepository;
 import com.example.FoodDeliveryApp.repository.FoodItemRepository;
@@ -65,34 +62,72 @@ public class CartServiceImpl implements CartService {
 
         Cart cart = customer.getCart();
 
-        // Ready to add FoodItem in the cart
-        FoodItem foodItem = FoodItem.builder()
-                .requiredQuantity(foodRequest.getRequiredQuantity())
-                .totalCost(foodRequest.getRequiredQuantity() * menuItem.getPrice())
-                .menuItem(menuItem)
-                .build();
+        // Check if the cart has items from different restaurant
+        if(!cart.getFoodItems().isEmpty()){
+            Restaurant currRestaurant = cart.getFoodItems().get(0).getMenuItem().getRestaurant();
+            Restaurant newRestaurant = menuItem.getRestaurant();
 
-        // Update the total Price in cart
+            if(!currRestaurant.equals(newRestaurant)){
+                // Delete all the food items in the cart and clear the cart
+                List<FoodItem> foodItems = cart.getFoodItems();
+                for (FoodItem foodItem : foodItems){
+                    foodItem.setCart(null);
+                    foodItem.setMenuItem(null);
+                    foodItem.setOrder(null);
+                }
+                cart.setCartTotal(0);
+                cart.getFoodItems().clear();
+                for(FoodItem foodItem : foodItems){
+                  foodItemRepository.delete(foodItem);
+                }
+            }
+        }
+
+        // Now check if the foodItem is already present in the cart
+        boolean alreadyExist = false;
+        FoodItem savedFoodItem;
+        if(!cart.getFoodItems().isEmpty()){
+            for(FoodItem foodItem : cart.getFoodItems()){
+                if(foodItem.getMenuItem().getId() == menuItem.getId()){
+                    savedFoodItem = foodItem;
+                    foodItem.setRequiredQuantity(foodItem.getRequiredQuantity() + foodRequest.getRequiredQuantity());
+                    foodItem.setTotalCost(foodItem.getMenuItem().getPrice() * foodItem.getRequiredQuantity());
+                    alreadyExist = true;
+                    break;
+                }
+            }
+        }
+
+        // If the food item is not there then create a new food item and save it in the DB
+        if(!alreadyExist){
+            FoodItem foodItem = FoodItem.builder()
+                    .requiredQuantity(foodRequest.getRequiredQuantity())
+                    .totalCost(foodRequest.getRequiredQuantity() * menuItem.getPrice())
+                    .menuItem(menuItem)
+                    .build();
+
+            savedFoodItem = foodItemRepository.save(foodItem);
+            cart.getFoodItems().add(savedFoodItem);
+            menuItem.getFoodItems().add(savedFoodItem);
+            savedFoodItem.setCart(cart);
+        }
+
+        // Calculate the total Price in cart
         double cartTotal = 0;
         // Previous FoodItems
-        for(FoodItem foodItem1 : cart.getFoodItems()){
-            cartTotal += foodItem1.getTotalCost();
+        for(FoodItem foodItem : cart.getFoodItems()){
+            cartTotal += foodItem.getTotalCost();
         }
-        // Current FoodItem
-        cartTotal += foodItem.getTotalCost();
 
         // Set the total Price in cart
         cart.setCartTotal(cartTotal);
 
-        // Save the FoodItem to Db
-        FoodItem savedFoodItem = foodItemRepository.save(foodItem);
-
-        // add FoodItem to cart and MenuItem
-        cart.getFoodItems().add(savedFoodItem);
-        menuItem.getFoodItems().add(savedFoodItem);
+        // Save the cart to Db
         Cart savedCart = cartRepository.save(cart);
         MenuItem savedMenuItem = menuItemRepository.save(menuItem);
 
+
+        // Convert Cart to Cart DTO and return it
         return CartTransformer.CartToCartResponse(cart);
     }
 }

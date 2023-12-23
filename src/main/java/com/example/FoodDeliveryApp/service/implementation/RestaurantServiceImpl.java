@@ -14,6 +14,7 @@ import com.example.FoodDeliveryApp.transformer.RestaurantTransformer;
 import com.example.FoodDeliveryApp.utils.ValidationUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -99,5 +100,24 @@ public class RestaurantServiceImpl implements RestaurantService {
                 .collect(Collectors.toList());
 
         return menuItemRespons;
+    }
+
+    @Override
+    public List<RestaurantResponse> getRestaurantWithMoreThanXOrders(int x) {
+
+        // Get all the Response with more than x orders
+        List<Restaurant> allRestaurants = restaurantRepository.findAll();
+        List<Restaurant> restaurants = new ArrayList<>();
+        for(Restaurant restaurant : allRestaurants){
+            if(restaurant.getOrders().size() > x){
+                restaurants.add(restaurant);
+            }
+        }
+
+        // Convert it to DTO and return it
+        return  restaurants
+                .stream()
+                .map(restaurant -> RestaurantTransformer.RestaurantToRestaurantResponse(restaurant))
+                .collect(Collectors.toList());
     }
 }

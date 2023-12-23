@@ -9,6 +9,7 @@ import com.example.FoodDeliveryApp.exception.RestaurantNotOpenedException;
 import com.example.FoodDeliveryApp.service.implementation.CartServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,7 @@ public class CartController {
         this.cartService = cartService;
     }
 
+    @PostMapping("/add/food")
     public ResponseEntity addFoodItemToCart(@RequestBody FoodRequest foodRequest){
         try {
             CartResponse cartResponse = cartService.addFoodItemToCart(foodRequest);

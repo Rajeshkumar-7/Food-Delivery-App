@@ -16,4 +16,6 @@ public interface RestaurantService {
     RestaurantResponse addMenuItemToRestaurant(MenuItemRequest menuItemRequest);
 
     List<MenuItemResponse> getMenuFromRestaurant(int id);
+
+    List<RestaurantResponse> getRestaurantWithMoreThanXOrders(int x);
 }

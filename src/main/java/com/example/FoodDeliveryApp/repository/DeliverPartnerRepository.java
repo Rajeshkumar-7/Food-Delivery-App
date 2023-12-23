@@ -12,4 +12,6 @@ public interface DeliverPartnerRepository extends JpaRepository<DeliveryPartner 
 
     @Query(value = query)
     DeliveryPartner findRandomDeliveryPartner();
+
+    DeliveryPartner findByMobileNumber(String mobileNumber);
 }

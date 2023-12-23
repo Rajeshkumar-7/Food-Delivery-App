@@ -24,6 +24,7 @@ public class CartTransformer {
         cartResponse.setCartTotal(cart.getCartTotal());
 
 
+
         if(cart.getFoodItems().isEmpty()){
             // If there is no foodItems in the cart
             cartResponse.setRestaurantName("");
